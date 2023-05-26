@@ -1,5 +1,6 @@
 let gridSize = 16; // Initial gridSize definition
 let mouseDown = false;
+let drawMode = 'draw';
 
 
 // Get references to DOM elements
@@ -7,6 +8,9 @@ const body = document.querySelector('body');
 const gridContainer = document.querySelector('.container');
 const setGridButton = document.querySelector('#grid-btn');
 const clearGridButton = document.querySelector('#clear-btn');
+const setDrawModeButton = document.querySelector('#draw-btn');
+const setEraserModeButton = document.querySelector('#eraser-btn');
+const toggleGridButton = document.querySelector('#toggle-borders-btn');
 
 
 // Toggle mouseDown variable to enable or disable drawing ability
@@ -16,6 +20,27 @@ body.addEventListener('mousedown', () => {
 
 body.addEventListener('mouseup', () => {
   mouseDown = false;
+});
+
+
+// Switch current draw mode based on buttons
+setDrawModeButton.addEventListener('click', () => {
+  drawMode = 'draw';
+});
+
+setEraserModeButton.addEventListener('click', () => {
+  drawMode = 'erase';
+});
+
+
+// Toggle display of grid lines
+toggleGridButton.addEventListener('click', () => {
+  let cells = document.querySelectorAll('.container div');
+
+  for (cell of cells) {
+    cell.classList.toggle('cell');
+    cell.classList.toggle('cell-borderless');
+  }
 });
 
 
@@ -57,7 +82,14 @@ function colorHoveredCell(e, cell) {
     if (e.type === 'mouseover' && !mouseDown) {
       return; // return condition if mouse is not down
     }
-    cell.classList.add('hovered');
+    switch (drawMode) {
+      case 'draw':
+        cell.classList.add('hovered');
+        break;
+      case 'erase':
+        cell.classList.remove('hovered');
+        break;
+    }
 }
 
 
